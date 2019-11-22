@@ -12,12 +12,14 @@ public class FracCalc {
 		System.out.println("Let's use the fraction calculator or type quit if not");
 		Scanner expressionScanner = new Scanner(System.in);
 		String wholeExpression = expressionScanner.nextLine();
+		
+		
 		if (wholeExpression.equals("quit")) {
 			System.out.print("See you l8er");
 		}
 
 		// while(!wholeExpression.equals("quit")) {
-		//System.out.println(wholeExpression);
+		// System.out.println(wholeExpression);
 		String secondOperand = produceAnswer(wholeExpression);
 		System.out.print(secondOperand);
 	}
@@ -40,66 +42,106 @@ public class FracCalc {
 		int spaceOneIndex = wholeExpression.indexOf(' ');
 
 		String firstOperand = wholeExpression.substring(0, spaceOneIndex);
-		//System.out.println("first value is " + firstOperand);
+		
+		
 		// whole and fraction
 		if (firstOperand.contains("_")) {
-			String whole1 = firstOperand.substring(0, 1);
-			//System.out.println("The whole number in the first operand is  " + whole1);
+			
+			int slashIndex = firstOperand.indexOf("/");
+			int underIndex = firstOperand.indexOf("_");
+			String whole1 = firstOperand.substring(0,underIndex);
+			int w1 = Integer.parseInt(whole1);
+			
+			String numerator1 = firstOperand.substring(underIndex + 1, slashIndex);
+			//int n1 = Integer.parseInt(numerator1);
 
-			String numerator1 = firstOperand.substring(2, 3);
-			//System.out.println("The numerator is " + numerator1);
-
-			String denominator1 = firstOperand.substring(4);
-			//System.out.println("The denominator is " + denominator1);
+			String denominator1 = firstOperand.substring(slashIndex + 1);
+			int d1 = Integer.parseInt(denominator1);
+			//String firstOperandInfo = ("\"whole:" + w1 + "numerator:" + n1 + "denominator:" + d1);
+//			
 		}
 		// just fraction
 		if (!firstOperand.contains("_") && firstOperand.contains("/")) {
-			String numerator1 = firstOperand.substring(0, 1);
+			int slashIndex = firstOperand.indexOf("/");
+			String numerator1 = firstOperand.substring(0, slashIndex);
 			//System.out.println("The numerator is " + numerator1);
-
-			String denominator1 = firstOperand.substring(2);
-			//System.out.println("The denominator is " + denominator1);
-			// String frac1Num = wholeExpression.substring(3,3);
+			//int n1 = Integer.parseInt(numerator1);
+			String denominator1 = firstOperand.substring(slashIndex+1);
+			int d1 = Integer.parseInt(denominator1);
+			int w1 = 0;
+			//String firstOperandInfo = ("\"whole:" + w1 + "numerator:" + n1 + "denominator:" + d1);
+			
 		}
+		
 		// just whole number
 		if (!firstOperand.contains("_") && !firstOperand.contains("/")) {
-			String whole1 = firstOperand.substring(0, 1);
-			//System.out.println("The whole number is " + whole1);
+			
+			String whole1 = firstOperand.substring(0, spaceOneIndex);
+			//int w1 = Integer.parseInt(whole1);
+			int n1 = 0;
+			int d1 = 1;
+			//String firstOperandInfo = ("\"whole:" + w1 + "numerator:" + n1 + "denominator:" + d1);
 		}
 
-		//System.out.println();
+		
+			
+		System.out.println();
 		int operatorIndex = spaceOneIndex + 1;
-		//System.out.println("The operator is " + wholeExpression.charAt(operatorIndex) + "\n");
+		wholeExpression.charAt(operatorIndex);
 
+		
+		
+		
+		
+		
 		// second operand stuff
 		String secondOperand = wholeExpression.substring(operatorIndex + 2);
-		//System.out.println("'" + secondOperand +"'" );
+		String secondOperandInfo = "";
 		// mixed
 		if (secondOperand.contains("_") && secondOperand.contains("/")) {
-			String whole2 = secondOperand.substring(0, 1);
-//			System.out.println("The whole number in the first operand is  " + whole2);
+			int slashIndex = secondOperand.indexOf("/");
+			int underIndex = secondOperand.indexOf("_");
+			String whole2 = secondOperand.substring(0,underIndex);
+			int w2 = Integer.parseInt(whole2);
+			
+			String numerator2 = secondOperand.substring(underIndex + 1, slashIndex);
+			int n2 = Integer.parseInt(numerator2);
 
-			String numerator2 = secondOperand.substring(2, 3);
-	//		System.out.println("The numerator is " + numerator2);
-
-			String denominator2 = secondOperand.substring(4);
-		//	System.out.println("The denominator is " + denominator2);
+			String denominator2 = secondOperand.substring(slashIndex + 1);
+			int d2 = Integer.parseInt(denominator2);
+			secondOperandInfo = ("whole:" + w2 + " numerator:" + n2 + " denominator:" + d2);
+			
 		}
+		
+			
+		
+		
 		// just fraction
 		if (!secondOperand.contains("_") && secondOperand.contains("/")) {
-			String numerator2 = secondOperand.substring(0, 1);
-			//System.out.println("The numerator is " + numerator2);
+			int slashIndex = secondOperand.indexOf("/");
+			String numerator2 = secondOperand.substring(0, slashIndex);
+			int n2 = Integer.parseInt(numerator2);
 
-			String denominator2 = secondOperand.substring(2);
-			//System.out.println("The denominator is " + denominator2);
-			// String frac1Num = wholeExpression.substring(3,3);
+			String denominator2 = secondOperand.substring(slashIndex + 1);
+			int d2  = Integer.parseInt(denominator2);
+			int w2 = 0;
+			secondOperandInfo = ("whole:" + w2 + " numerator:" + n2 + " denominator:" + d2);
+			
 		}
+		
+		
 		// just whole number
+		
 		if (!secondOperand.contains("_") && !secondOperand.contains("/")) {
 			String whole2 = secondOperand.substring(0);
-			//System.out.println(whole2);
+			int w2 = Integer.parseInt(whole2);
+			int n2 = 0;
+			int d2 = 1;
+			secondOperandInfo = ("whole:" + w2 + " numerator:" + n2 + " denominator:" + d2);
+		
+
 		}
-		return secondOperand;
+		return secondOperandInfo;
 	}
 
 	// TODO: Fill in the space below with any helper methods that you think you will
