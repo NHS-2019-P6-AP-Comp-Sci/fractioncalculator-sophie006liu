@@ -9,7 +9,8 @@ public class FracCalc {
 
 	public static void main(String[] args) {
 		// TODO: Read the input from the user and call produceAnswer with an equation
-		System.out.println("Let's use the fraction calculator or type quit if not");
+		System.out.println("Let's use the fraction calculator. Keep typing expressions to continue using the"
+				+ "calculator or type \"quit\" to stop");
 
 		Scanner scanner = new Scanner(System.in);
 		String wholeExpression = scanner.nextLine();
@@ -20,8 +21,6 @@ public class FracCalc {
 				System.exit(0);
 			}
 
-			// while(!wholeExpression.equals("quit")) {
-			// System.out.println(wholeExpression);
 			String result = produceAnswer(wholeExpression);
 			System.out.println("Answer:" + result);
 			wholeExpression = scanner.nextLine();
@@ -43,11 +42,16 @@ public class FracCalc {
 	// e.g. return ==> "1_1/4"
 	public static String produceAnswer(String wholeExpression) {
 		// TODO: Implement this function to produce the solution to the input
+		String answers = "";
 		int spaceOneIndex = wholeExpression.indexOf(' ');
 
 		String firstOperand = wholeExpression.substring(0, spaceOneIndex);
 		String firstOperandInfo = "";
-
+		if (wholeExpression.contains("0 ") && wholeExpression.indexOf(0) == 0) {
+			if (wholeExpression.contains(" * ")){
+				answers = "0";
+			}
+		}
 		// whole and fraction
 		if (firstOperand.contains("_")) {
 
@@ -87,10 +91,10 @@ public class FracCalc {
 			firstOperandInfo = mixedNumber(w1, n1, d1);
 		}
 
-		System.out.println();
 		int operatorIndex = spaceOneIndex + 1;
 		wholeExpression.charAt(operatorIndex);
-
+		String operator = wholeExpression.substring(operatorIndex, operatorIndex + 1);
+	
 		// second operand stuff
 		String secondOperand = wholeExpression.substring(operatorIndex + 2);
 		String secondOperandInfo = "";
@@ -134,18 +138,39 @@ public class FracCalc {
 
 		}
 
-		String answers = "";
+		
 		if (wholeExpression.contains("+")) {
 			answers = addition(firstOperandInfo, secondOperandInfo);
-		} else if (wholeExpression.contains(" - ")) {
+		} else if (operator.equals("-")) {
 			answers = subtraction(firstOperandInfo, secondOperandInfo);
-		} else if (wholeExpression.contains("*")) {
+		} else if (operator.equals("*")) {
 			answers = multiplication(firstOperandInfo, secondOperandInfo);
 			System.out.println(answers);
-		} else if (wholeExpression.contains("/")) {
+		} else if (operator.equals("/")) {
 			answers = division(firstOperandInfo, secondOperandInfo);
 		}
-		
+		if (operator.equals("*") && firstOperand.equals("0")) {
+				answers = "0";
+		}
+		if (operator.equals("/") && firstOperand.equals("0")) {
+			answers = "0";
+		}
+		if (operator.equals("/") && firstOperand.equals("-0")) {
+			answers = "0";
+		}
+		if (operator.equals("*") && secondOperand.equals("0")) {
+			answers = "0";
+		}
+		if (firstOperand.contains("0/") && operator.contentEquals("*")) {
+			answers = "0";
+		}
+		if (firstOperand.contains("0/") && operator.contentEquals("/")) {
+			answers = "0";
+		}
+		if (firstOperand.equals(secondOperand) && operator.contentEquals("-")) {
+			answers = "0";
+		}
+			
 		return answers;
 	}
 
@@ -187,10 +212,23 @@ public class FracCalc {
 		int finalNum = a * d + b * c;
 		int finalDen = b * d;
 
-		String answer = finalNum + "/" + finalDen;
+		int gcf = GCF(Math.abs(finalNum), Math.abs(finalDen));
+		String answer="";
+		if (Math.abs(finalDen) > Math.abs(finalNum)) {
+			answer = (finalNum/gcf) + "/" + (finalDen/gcf);
+		} else if (Math.abs(finalDen) <= Math.abs(finalNum)){
+			String num = "" + finalNum/gcf;
+			String den = "" + finalDen/gcf;		
+			answer= returnMixedFrac( num, den);
+		}
+		
+
 		return answer;
 	}
 
+	
+	
+	
 	public static String subtraction(String firstfraction, String secondfraction) {
 		int slash1 = firstfraction.indexOf("/");
 		String num1 = firstfraction.substring(0, slash1);
@@ -207,8 +245,20 @@ public class FracCalc {
 		int finalNum = a * d - b * c;
 		int finalDen = b * d;
 
-		String answer = finalNum + "/" + finalDen;
+		int gcf = GCF(Math.abs(finalNum), Math.abs(finalDen));
+		String answer="";
+		if (Math.abs(finalDen) > Math.abs(finalNum)) {
+			answer = (finalNum/gcf) + "/" + (finalDen/gcf);
+		} else if (Math.abs(finalDen) <= Math.abs(finalNum)){
+			String num = "" + finalNum/gcf;
+			String den = "" + finalDen/gcf;		
+			answer= returnMixedFrac( num, den);
+		}
+
+		
+
 		return answer;
+		
 	}
 
 	public static String division(String firstfraction, String secondfraction) {
@@ -233,10 +283,23 @@ public class FracCalc {
 		}
 		finalDen = Math.abs(finalDen);
 		finalNum = Math.abs(finalNum);
-		String answer = sign + finalNum + "/" + finalDen;
+		int gcf = GCF(Math.abs(finalNum), Math.abs(finalDen));
+		String answer="";
+		if (Math.abs(finalDen) > Math.abs(finalNum)) {
+			answer = sign + (finalNum/gcf) + "/" + (finalDen/gcf);
+		} else if (Math.abs(finalDen) <= Math.abs(finalNum)){
+			String num = "" + finalNum/gcf;
+			String den = "" + finalDen/gcf;		
+			answer= sign + returnMixedFrac( num, den);
+		}
+
 		return answer;
 	}
 
+	
+	
+	
+	
 	public static String multiplication(String firstfraction, String secondfraction) {
 		int slash1 = firstfraction.indexOf("/");
 		String num1 = firstfraction.substring(0, slash1);
@@ -260,9 +323,48 @@ public class FracCalc {
 			sign = "-";
 		}
 		finalDem = Math.abs(finalDem);
+		
 		finalNum = Math.abs(finalNum);
-		String answer = sign + finalNum + "/" + finalDem;
+		int gcf = GCF(Math.abs(finalNum), Math.abs(finalDem));
+		
+		String answer="";
+		if (Math.abs(finalDem) > Math.abs(finalNum)) {
+			answer = sign + (finalNum/gcf) + "/" + (finalDem/gcf);
+		} else if (Math.abs(finalDem) <= Math.abs(finalNum)){
+			String num = "" + finalNum/gcf;
+			String den = "" + finalDem/gcf;		
+			answer= sign + returnMixedFrac( num, den);
+		}
 
 		return answer;
 	}
+	
+	
+	
+	
+	
+	
+	public static int GCF(int a, int b) { 
+		if (b == 0) { 
+			return a; 
+		} else { 
+			return (GCF(b, a % b)); } 
+		}
+	public static String returnMixedFrac(String num, String den) {
+		int n= Integer.parseInt(num);
+		int d= Integer.parseInt(den);
+		int wholeNum= n/d;
+		
+		int newNum = (n % d);
+		
+		String answer = "";
+		if (newNum != 0) {
+			answer= "" + wholeNum + "_" + Math.abs(newNum) + "/" + d;
+		} else if (newNum == 0) {
+			answer = "" + wholeNum;
+		}
+		return answer;
+		
+	}
+	
 }
