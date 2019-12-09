@@ -15,6 +15,7 @@ public class FracCalc {
 		Scanner scanner = new Scanner(System.in);
 		String wholeExpression = scanner.nextLine();
 
+		//keep calc going until user types quit
 		while (true) {
 			if (wholeExpression.equals("quit")) {
 				System.out.println("See you l8er");
@@ -52,7 +53,7 @@ public class FracCalc {
 				answers = "0";
 			}
 		}
-		// whole and fraction
+		// 1st operand contains whole num and fraction
 		if (firstOperand.contains("_")) {
 
 			int slashIndex = firstOperand.indexOf("/");
@@ -68,7 +69,7 @@ public class FracCalc {
 			firstOperandInfo = mixedNumber(w1, n1, d1);
 //			
 		}
-		// just fraction
+		// 1st operand contains just fraction
 		if (!firstOperand.contains("_") && firstOperand.contains("/")) {
 			int slashIndex = firstOperand.indexOf("/");
 			String numerator1 = firstOperand.substring(0, slashIndex);
@@ -81,7 +82,7 @@ public class FracCalc {
 
 		}
 
-		// just whole number
+		// 1st operand contains just whole number
 		if (!firstOperand.contains("_") && !firstOperand.contains("/")) {
 
 			String whole1 = firstOperand.substring(0, spaceOneIndex);
@@ -98,7 +99,7 @@ public class FracCalc {
 		// second operand stuff
 		String secondOperand = wholeExpression.substring(operatorIndex + 2);
 		String secondOperandInfo = "";
-		// mixed
+		// 2nd operand contains mixed num
 		if (secondOperand.contains("_") && secondOperand.contains("/")) {
 			int slashIndex = secondOperand.indexOf("/");
 			int underIndex = secondOperand.indexOf("_");
@@ -114,7 +115,7 @@ public class FracCalc {
 
 		}
 
-		// just fraction
+		// 2nd operand contains just fraction
 		if (!secondOperand.contains("_") && secondOperand.contains("/")) {
 			int slashIndex = secondOperand.indexOf("/");
 			String numerator2 = secondOperand.substring(0, slashIndex);
@@ -127,7 +128,7 @@ public class FracCalc {
 
 		}
 
-		// just whole number
+		// 2nd operand contains just whole number
 
 		if (!secondOperand.contains("_") && !secondOperand.contains("/")) {
 			String whole2 = secondOperand.substring(0);
@@ -138,7 +139,7 @@ public class FracCalc {
 
 		}
 
-		
+		// doing the calculation based on the operand
 		if (wholeExpression.contains("+")) {
 			answers = addition(firstOperandInfo, secondOperandInfo);
 		} else if (operator.equals("-")) {
@@ -149,6 +150,10 @@ public class FracCalc {
 		} else if (operator.equals("/")) {
 			answers = division(firstOperandInfo, secondOperandInfo);
 		}
+		
+		
+		
+		// division and multiplication with zero
 		if (operator.equals("*") && firstOperand.equals("0")) {
 				answers = "0";
 		}
@@ -343,13 +348,20 @@ public class FracCalc {
 	
 	
 	
-	
+	//find the GCF using the Euclidean algorithm
+	//say you pass in a = 8 and b= 4, it will keep running the algorithm until b= 0
+	// first run b!=0, so it runs again with the new a value as b = 4, and b now equals 
+	// the old a value % b so in this case 4 % 8 is . We are now using gcf (4, 4)
+	// b != 0, so gcf runs again with the new a value as b = 4, and b is the old a value % b = 0
+	// We are now using gcf (4, 0). b ==0, we return int a = 4 which is the GCF of 8 and 4
 	public static int GCF(int a, int b) { 
 		if (b == 0) { 
 			return a; 
 		} else { 
 			return (GCF(b, a % b)); } 
 		}
+	
+	// this takes improper fractions and makes them mixed numbers
 	public static String returnMixedFrac(String num, String den) {
 		int n= Integer.parseInt(num);
 		int d= Integer.parseInt(den);
